@@ -100,6 +100,8 @@ class Movuino(Thread):
 		self.osc_server = OSCserver(computerIP_, portIn_) # Init server communication on specific Ip and port
 		self.osc_server.addListener(self.listenOSCAdr1) # add listener
 		self.osc_server.addListener(self.listenOSCAdr2) # add listener
+		self.osc_server.addListener('gesture') 
+		self.osc_server.addListener('repetitions') 
 
 		#############   CLIENT   #############
 		self.osc_client = OSCclient(movuinoIP_, portOut_) # Init client communication on specific Ip and port
