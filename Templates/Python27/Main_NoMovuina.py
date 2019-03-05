@@ -8,10 +8,10 @@ import Movuino as mvn
 #####################################################################
 
 # COMPUTER
-computerIP = "150.10.147.70" # set here your computer IP
+computerIP = "192.168.43.116" # set here your computer IP
 
 # MOVUINO MASTER
-movuinoIP = "150.10.147.56"  # set here your Movuino IP once its connected to the same wifi network as your computer
+movuinoIP = "192.168.43.236"  # set here your Movuino IP once its connected to the same wifi network as your computer
 movuino = mvn.Movuino(computerIP, movuinoIP, 7400, 7401) # port in // port out
 
 #####################################################################
@@ -30,7 +30,7 @@ def main(args = None):
 	movuino.vibroNow(False)							# turn off vibration on Movuino
 
 	timer0 = time.time()
-	while (time.time()-timer0 < 5):
+	while (time.time()-timer0 < 10):
 		movuino.dataPrint()								# print incoming data and device id
 
 		red_ = (int)(255.0*(0.07+movuino.ax)/0.14)		# use data to set the red light component

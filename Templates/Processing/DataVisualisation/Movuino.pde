@@ -23,7 +23,8 @@ public class Movuino implements Runnable {
   int portIn = 3010;
   int portOut = 3011;
   String ip;
-
+  
+  String id;
   float ax; // current acceleration X
   float ay; // current acceleration Y
   float az; // current acceleration Z
@@ -57,15 +58,15 @@ public class Movuino implements Runnable {
   public void run() {
     while (true) {   
       // Update Movuino data at each frame
-      this.ax = this.rawData[1];
-      this.ay = this.rawData[2];
-      this.az = this.rawData[3];
-      this.gx = this.rawData[4];
-      this.gy = this.rawData[5];
-      this.gz = this.rawData[6];
-      this.mx = this.rawData[7];
-      this.my = this.rawData[8];
-      this.mz = this.rawData[9];
+      this.ax = this.rawData[0];
+      this.ay = this.rawData[1];
+      this.az = this.rawData[2];
+      this.gx = this.rawData[3];
+      this.gy = this.rawData[4];
+      this.gz = this.rawData[5];
+      this.mx = this.rawData[6];
+      this.my = this.rawData[7];
+      this.mz = this.rawData[8];
       
       delay(5); // regulation
     }
@@ -110,23 +111,51 @@ public class Movuino implements Runnable {
 
   void oscEvent(OscMessage theOscMessage) {
     // Receive data from Movuino on the channel /movuinOSC
-    if (theOscMessage.checkAddrPattern("/sensorData")) {
+    if (theOscMessage.checkAddrPattern("/movuino")) {
       if (theOscMessage.checkTypetag("sfffffffffii")) {
+        this.id = theOscMessage.get(0).stringValue();
         for(int i=0; i<nDat; i++){
           this.rawData[i] = theOscMessage.get(i+1).floatValue();
         }
         return;
       }
     }
-    if (theOscMessage.checkAddrPattern("/sensorRep")) {
-      if (theOscMessage.checkTypetag("iii")) {
-        this.repAcc = boolean(theOscMessage.get(0).intValue());
-        this.repGyr = boolean(theOscMessage.get(1).intValue());
-        this.repMag = boolean(theOscMessage.get(2).intValue());
+    if (theOscMessage.checkAddrPattern("/streamo")) {
+      if (theOscMessage.checkTypetag("sfffffffffii")) {
+        this.id = theOscMessage.get(0).stringValue();
+        for(int i=0; i<nDat; i++){
+          this.rawData[i] = theOscMessage.get(i+1).floatValue();
+        }
         return;
       }
     }
-    if (theOscMessage.checkAddrPattern("/xmm")) {
+    if (theOscMessage.checkAddrPattern("/repetitions")) {
+      if (theOscMessage.checkTypetag("s")) {
+        this.repAcc = false; //boolean(theOscMessage.get(0).intValue());
+        this.repGyr = false; //boolean(theOscMessage.get(1).intValue());
+        this.repMag = false; //boolean(theOscMessage.get(2).intValue());
+        
+        String sensor_ =  theOscMessage.get(0).stringValue();
+        
+        switch(sensor_){
+          case "accelerometer":
+            this.repAcc = true;
+            break;
+          case "gyroscope":
+            this.repGyr = true;
+            break;
+          case "magnetometer":
+            this.repMag = true;
+            break;
+          default:
+            break;
+        }
+        
+        
+        return;
+      }
+    }
+    if (theOscMessage.checkAddrPattern("/gesture")) {
       if (theOscMessage.checkTypetag("if")) {
         this.xmmGestId = theOscMessage.get(0).intValue();
         this.xmmGestProg = theOscMessage.get(1).floatValue();

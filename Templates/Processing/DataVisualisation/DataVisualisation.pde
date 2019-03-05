@@ -32,6 +32,8 @@ void setup () {
 }
 
 void draw() {
+  println(movuino.id);
+  
   // Update data at each frame
   ax = movuino.ax;
   ay = movuino.ay;
