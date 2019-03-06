@@ -67,6 +67,7 @@ def main(args = None):
 	movuino1.lightNow(True)  # turn on on last color
 	time.sleep(0.5)
 	movuino1.lightNow(False)
+	movuino2.lightNow(False)
 
 	#-----------------------#
 

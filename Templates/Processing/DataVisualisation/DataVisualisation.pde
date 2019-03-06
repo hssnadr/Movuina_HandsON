@@ -29,7 +29,7 @@ void setup () {
   textFont(font, 30);
   
   callMovuino("127.0.0.1", 3000, 3001);
-  //callMovuino("150.10.147.44", 7400, 7401);
+  //callMovuino("150.10.147.14", 7400, 7401);
 }
 
 void draw() {
