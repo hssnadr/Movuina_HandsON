@@ -28,11 +28,12 @@ void setup () {
   textAlign(CENTER, CENTER);
   textFont(font, 30);
   
-  callMovuino("127.0.0.1", 3000, 3010);
+  callMovuino("127.0.0.1", 3000, 3001);
+  //callMovuino("150.10.147.44", 7400, 7401);
 }
 
 void draw() {
-  println(movuino.id);
+  movuino.printInfo();
   
   // Update data at each frame
   ax = movuino.ax;
@@ -75,4 +76,8 @@ void draw() {
 }
 void mousePressed() {
   drawMode = ++drawMode%4;
+  
+  color c = get(mouseX, mouseY);
+  movuino.setNeopix(red(c)/2, green(c)/2, blue(c)/2);
+  //movuino.setNeopix(c);
 }
