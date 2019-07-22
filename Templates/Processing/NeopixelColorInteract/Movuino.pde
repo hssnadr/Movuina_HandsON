@@ -46,6 +46,7 @@ public class Movuino implements Runnable {
   int red = 255;   // red component for neopixel color
   int green = 255; // green component for neopixel color
   int blue = 255;  // blue component for neopixel color
+  private int brightness = 255;
 
   public Movuino(String ip_, int portin_, int portout_) {
     this.ip = ip_;
@@ -122,6 +123,11 @@ public class Movuino implements Runnable {
       this.setNeopix(0);                               // turn off
     }
   }
+  
+  void setBrightness(int bright_){
+    this.brightness = constrain(bright_, 0, 255);     // set new brightness
+    this.setNeopix(this.red, this.green, this.blue);  // send to Movuino
+  }
 
   void setNeopix(color color_) {
     setNeopix(red(color_), green(color_), blue(color_));
@@ -134,11 +140,13 @@ public class Movuino implements Runnable {
 
   void setNeopix(float red_, float green_, float blue_) {
     OscMessage myOscMessage = new OscMessage("/neopix"); // create a new OscMessage with an address pattern
+    
+    float bright_ = map(this.brightness, 0, 255, 255, 1);
 
     // Add new color values to message
-    myOscMessage.add(int(red_));
-    myOscMessage.add(int(green_));
-    myOscMessage.add(int(blue_));
+    myOscMessage.add(int(red_/bright_));
+    myOscMessage.add(int(green_/bright_));
+    myOscMessage.add(int(blue_/bright_));
 
     // Send message
     oscP5Movuino.send(myOscMessage, myMovuinoLocation); // send the OscMessage to a remote location specified in myNetAddress
