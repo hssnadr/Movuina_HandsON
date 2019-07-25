@@ -141,13 +141,13 @@ public class Movuino implements Runnable {
   }
 
   void vibroNow(boolean isVibro_) {
-    OscMessage myOscMessage = new OscMessage("/vibroNow"); // create a new OscMessage with an address pattern
+    OscMessage myOscMessage = new OscMessage("/vibro/now"); // create a new OscMessage with an address pattern
     myOscMessage.add(isVibro_); // add a value to the OscMessage
     oscP5Movuino.send(myOscMessage, myMovuinoLocation); // send the OscMessage to a remote location specified in myNetAddress
   }
 
   void vibroPulse(int on_, int off_, int n_) {
-    OscMessage myOscMessage = new OscMessage("/vibroPulse"); // create a new OscMessage with an address pattern
+    OscMessage myOscMessage = new OscMessage("/vibro/pulse"); // create a new OscMessage with an address pattern
     myOscMessage.add(on_);   // add active time to osc message
     myOscMessage.add(off_);  // add inactive time to osc message
     myOscMessage.add(n_);    // add number of repetitions to the osc message
