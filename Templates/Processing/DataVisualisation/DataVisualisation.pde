@@ -19,22 +19,24 @@ int drawMode = 0;
 PFont font;
 String curMode = "";
 
+boolean switchLight = true;
+
 void setup () {
   // set the window size:
-  size(500,800,P3D);
+  size(500, 800, P3D);
   background(255);
-  
+
   font = loadFont("MuseoSansRounded-300-48.vlw");
   textAlign(CENTER, CENTER);
   textFont(font, 30);
-  
+
   callMovuino("127.0.0.1", 3000, 3001);
-  //callMovuino("150.10.147.14", 7400, 7401);
+  //callMovuino("150.10.147.44", 7400, 7401);
 }
 
 void draw() {
-  movuino.printInfo();
-  
+  //movuino.printInfo();
+
   // Update data at each frame
   ax = movuino.ax;
   ay = movuino.ay;
@@ -45,39 +47,43 @@ void draw() {
   mx = movuino.mx;
   my = movuino.my;
   mz = movuino.mz;
-  
+
   // Refresh screen
   background(255);
-  
+
   //-------------------
   // Display modes: click with the mouse to switch mode
   //-------------------
-  switch(drawMode){
-    case 0:
-      dataPlayground(ax,ay,az,gx,gy,gz,mx,my,mz);
-      curMode = "PLAYGROUND";
-      break;
-    case 1:
-      dataGizmo(ax,ay,az,0.6);
-      curMode = "ACCELEROMETER";
-      break;
-   case 2:
-      dataGizmo(gx,gy,gz,0.4);
-      curMode = "GYROSCOPE";
-      break;
-   case 3:
-      dataGizmo(mx,my,mz,0.5);
-      curMode = "MAGNETOMETER";
-      break; 
+  switch(drawMode) {
+  case 0:
+    dataPlayground(ax, ay, az, gx, gy, gz, mx, my, mz);
+    curMode = "PLAYGROUND";
+    break;
+  case 1:
+    dataGizmo(ax, ay, az, 0.6);
+    curMode = "ACCELEROMETER";
+    break;
+  case 2:
+    dataGizmo(gx, gy, gz, 0.4);
+    curMode = "GYROSCOPE";
+    break;
+  case 3:
+    dataGizmo(mx, my, mz, 0.5);
+    curMode = "MAGNETOMETER";
+    break;
   }
-  
+
   fill(c0);
   text(curMode + "\nclick to switch", width/2, height*6/7);  // draw score
 }
 void mousePressed() {
   drawMode = ++drawMode%4;
-  
-  color c = get(mouseX, mouseY);
-  movuino.setNeopix(red(c)/2, green(c)/2, blue(c)/2);
-  //movuino.setNeopix(c);
+}
+
+void keyPressed() {
+  if (keyCode == ENTER) {
+    println("Light ON =", switchLight);
+    movuino.lightNow(switchLight);
+    switchLight = !switchLight;
+  }
 }
